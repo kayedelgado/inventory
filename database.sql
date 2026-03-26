@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS inventory_db;
+USE inventory_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
+);
+
+INSERT INTO users (username, password)
+VALUES ('admin', 'admin123')
+ON DUPLICATE KEY UPDATE password = VALUES(password);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    category_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
